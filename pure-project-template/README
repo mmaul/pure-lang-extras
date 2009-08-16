@@ -1,0 +1,35 @@
+===================== = ==== ======= ======= ========
+pure-project-tamplate - Pure Library Project Template
+===================== = ==== ======= ======= ========
+
+:Authors: - Mike Maul<mike.maul@gmail.com>
+
+This is a project templet for build pure library extensions.
+To implement your library edit the Makefile ass apropriate.
+Usful make targets are discussed below.
+
+Installation
+============
+
+** GENERIC INSTRUCTIONS **
+Run ``make`` to compile the module and ``make install`` (as root) to install
+it in the Pure library directory. This requires GNU make, and of course you
+need to have Pure installed. 
+
+``make`` tries to guess your Pure installation directory and platform-specific
+setup. If it gets this wrong, you can set some variables manually. In
+particular, ``make install prefix=/usr`` sets the installation prefix, and
+``make PIC=-fPIC`` or some similar flag might be needed for compilation on 64
+bit systems. 
+
+Other useful build targets are
+html  -- builds html documentation
+pdf   -- builds pdf documentation
+dist  -- build distrubtuion copy of source package
+clean -- removes all generated and compiled files 
+         (Dont do this if pure-gen is not installed)
+Usage
+=====
+** PLACE USAGE INSTRUCTIONS HERE **
+
+
