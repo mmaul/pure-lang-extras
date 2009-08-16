@@ -1,0 +1,28 @@
+/* Example of createing s server socket and listening for conections */
+using ffi,system;
+using posix::socket;
+using namespace posix::socket;
+
+readloop f = read_a_line f 0
+with read_a_line f c = check s when s = fgets f end
+  with check s::string = puts s $$ fputs s f $$ (c + 1) if done s;
+                       = c if null s;
+                       = puts s $$ fputs s f $$ read_a_line f (c+1) otherwise;
+
+       done s::string  = feof f || ferror f || ~null s && last s == "";
+  end;
+end;
+
+readloop fp when
+    sockfd = if fd < 0 then throw EXCEPTION_SOCK_OPEN_FAILED else fd when
+      fd = socket AF_INET SOCK_STREAM 0;
+    end;
+    addr1 = make_sockaddr AF_INET "*" 5000;
+    connfd = if bind_socket sockfd addr1 < 0 then
+                 throw EXCEPTION_SOCK_BIND
+             else
+                 if listen sockfd 5 < 0 then throw EXCEPTION_SOCK_LISTEN 
+                 else  accept_socket sockfd addr1;
+    fp = fdopen connfd "r+";
+end;
+
