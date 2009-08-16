@@ -1,0 +1,23 @@
+/* Example of createing s server socket and listening for conections */
+using ffi,system;
+using posix::socket;
+using namespace posix::socket; 
+
+writeloop f n = write_a_line f 0 n
+with write_a_line f c n = writeit str when str = sprintf "line %d\n" c end
+	      with writeit str = fputs str f $$ puts $ fgets f $$ write_a_line f (c+1) n if c < n;
+                               =  c otherwise;
+              end;
+end;
+
+writeloop fp 10 when
+      sockfd = if fd < 0 then throw EXCEPTION_SOCK_OPEN_FAILED else fd when
+          fd = socket AF_INET SOCK_STREAM 0;
+    end;
+    addr1 = make_sockaddr AF_INET "*" 5000;
+    fp = if connect_socket sockfd addr1 < 0 then
+                 throw EXCEPTION_SOCK_BIND
+             else
+                 fdopen sockfd "r+";
+end;
+
