@@ -2,11 +2,9 @@
 pure-project-tamplate - Pure Library Project Template
 ===================== = ==== ======= ======= ========
 
-:Authors: - Mike Maul<mike.maul@gmail.com>
-
-This is a project templet for build pure library extensions.
+This is a project template for build pure library extensions.
 To implement your library edit the Makefile ass apropriate.
-Usful make targets are discussed below.
+Usful make targets are discussed below. 
 
 Installation
 ============
