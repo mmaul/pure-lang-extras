@@ -1,0 +1,19 @@
+/* /usr/include/unistd.h: */
+
+namespace posix::fork;
+extern int sleep(int);
+extern int usleep(int);
+extern int fork();
+extern int vfork();
+/* /usr/include/sys/wait.h: */
+using "lib:wait";
+
+namespace posix::fork;
+extern int sigwait(sigset_t*, int*);
+extern int sigwaitinfo(sigset_t*, siginfo_t*);
+extern int sigtimedwait(sigset_t*, siginfo_t*, void/*struct timespec*/*);
+extern int Pure_wait(__WAIT_STATUS*) = wait;
+extern int waitpid(int, int*, int);
+extern int waitid(int, int, siginfo_t*, int);
+extern int Pure_wait3(__WAIT_STATUS*, int, void/*struct rusage*/*) = wait3;
+extern int Pure_wait4(int, __WAIT_STATUS*, int, void/*struct rusage*/*) = wait4;
