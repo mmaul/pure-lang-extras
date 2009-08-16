@@ -11,7 +11,7 @@ MANPUREFILES = posix.pure
 #pure code (will be installed)
 PUREFILES = $(MANPUREFILES) $(GENPUREFILES)
 #generated c files * will be deleted by clean *
-GENCFILES = wait.c
+GENCFILES = wait.c 
 #manually created cfiles * will not be delete by clean *
 MANCFILES =  socket.c
 #all c files
@@ -92,7 +92,7 @@ fork.pure :
 #### END   project specific build tasks
 
 $(lib_name)$(DLL): $(CFILES)
-	gcc -shared -o $@ $<
+	gcc -shared -o $@ $?
 
 clean: 
 	rm -f socket.pure fork.pure $(lib_name)$(DLL) $(GENCFILES) *.aux *.log *.out \
@@ -123,8 +123,8 @@ doc/%.pdf: doc/%.tex
 	mv ../$@ doc
 
 install:
-	test -d "$(DESTDIR)$(libdir)/pure" || mkdir -p "$(DESTDIR)$(libdir)/pure"
-	cp $(PUREFILES) $(lib_name)$(DLL) doc/$(project_name).html "$(DESTDIR)$(libdir)/pure"
+	test -d "$(DESTDIR)$(libdir)/pure/$(lib_name)" || mkdir -p "$(DESTDIR)$(libdir)/pure/$(lib_name)"
+	cp $(PUREFILES) $(lib_name)$(DLL) doc/$(project_name).html "$(DESTDIR)$(libdir)/pure/$(lib_name)"
 
 uninstall:
 	rm -f "$(DESTDIR)$(libdir)/pure/$(PUREFILES)" "$(DESTDIR)$(libdir)/pure/$(lib_name)$(DLL)" "$(DESTDIR)$(libdir)/pure/$(project_name).html"
