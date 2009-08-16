@@ -1,10 +1,42 @@
-
-# Package name and version number:
+#### BEGIN project specific configuration
+# library, projecte name and version number:
 lib_name=posix
 project_name = pure-$(lib_name)
 version = 0.1
+
+#generated pure files * will be deleted by clean *
+GENPUREFILES = socket.pure fork.pure
+#manually created pure files * will not be deleted by clean *
+MANPUREFILES = posix.pure
+#pure code (will be installed)
+PUREFILES = $(MANPUREFILES) $(GENPUREFILES)
+#generated c files * will be deleted by clean *
+GENCFILES = wait.c
+#manually created cfiles * will not be delete by clean *
+MANCFILES =  socket.c
+#all c files
+CFILES = $(GENCFILES) $(MANCFILES)
+#all source include source used only during build
+SOURCEFILES = $(PUREFILES) $(CFILES) socket.pure.head socket.pure.tail \
+posix.head
+#all files to be included in a source release
+DISTFILES = COPYING Makefile README config.guess examples/*.pure $(SOURCEFILES) \
+ doc/$(project_name).html
 dist = $(project_name)-$(version)
 target = $(project_name)
+
+# Default CFLAGS are -g -O2, CPPFLAGS, LDFLAGS and LIBS are empty by default.
+# These can be set from the command line as usual. Use CFLAGS, CPPFLAGS and
+# LDFLAGS for compiler (-O etc.), preprocessor (-I etc.) and linker (-L etc.) 
+# options, respectively. LIBS is to be used for additional libraries to be
+# linked (-l etc.).
+INCLUDE_PATH = /usr/include
+CFLAGS = -g -O2
+
+# project specific build tasks should be located after all task below
+
+#### END project specific configuration
+#### standard targes , probable don't need to edit below here
 
 # Try to guess the installation prefix (this needs GNU make):
 prefix = $(patsubst %/bin/pure,%,$(shell which pure 2>/dev/null))
@@ -39,27 +71,11 @@ ifneq "$(findstring x86_64-,$(host))" ""
 # 64 bit, needs -fPIC flag
 PIC = -fPIC
 endif
-
-# Default CFLAGS are -g -O2, CPPFLAGS, LDFLAGS and LIBS are empty by default.
-# These can be set from the command line as usual. Use CFLAGS, CPPFLAGS and
-# LDFLAGS for compiler (-O etc.), preprocessor (-I etc.) and linker (-L etc.) 
-# options, respectively. LIBS is to be used for additional libraries to be
-# linked (-l etc.).
-
-CFLAGS = -g -O2
- 
 FLAGS = $(CPPFLAGS) $(CFLAGS) $(PIC) $(LDFLAGS)
 
-PUREFILES = socket.pure fork.pure posix.pure socket.pure.head socket.pure.tail \
-posix.head
-sources = $(PUREFILES) 
-DISTFILES = COPYING Makefile README config.guess examples/*.pure socket.c \
-wait.c socket.pure doc/$(project_name).html
-DISTFILES = COPYING Makefile README config.guess examples/*.pure socket.c \
-wait.c $(sources) doc/$(project_name).html 
-INCLUDE_PATH = /usr/include
-all : socket.pure fork.pure posix.so doc/$(target).html
+all : socket.pure fork.pure $(lib_name)$(DLL) doc/$(target).html
 
+#### BEGIN project specific build tasks
 socket.pure :
 	pure-gen --interface extern  --namespace posix::socket \
                  --output socket.pure.tmp1 $(INCLUDE_PATH)/sys/socket.h
@@ -73,17 +89,19 @@ fork.pure :
                  -s "(.*wait.*)" --output fork.pure  --noclobber \
                  -fc-auto $(INCLUDE_PATH)/sys/wait.h
 
-posix.so: socket.pure fork.pure
-	gcc -shared -o posix.so socket.c 
+#### END   project specific build tasks
+
+$(lib_name)$(DLL): $(CFILES)
+	gcc -shared -o $@ $<
 
 clean: 
-	rm -f socket.pure fork.pure posix.so wait.c *.aux *.log *.out \
+	rm -f socket.pure fork.pure $(lib_name)$(DLL) $(GENCFILES) *.aux *.log *.out \
               doc/*.pdf doc/*.tex doc/*.html doc/*.txt $(dist).tar.gz *~
 	rm -rf $(dist)
 # documentation (this needs docutils)
 
-doc/$(target).txt: README $(sources)
-	pure-doc $(sources) > $@
+doc/$(target).txt: README $(SOURCEFILES)
+	pure-doc $< > $@
 
 .PHONY: html tex pdf
 
@@ -102,14 +120,14 @@ doc/%.pdf: doc/%.tex
 	pdflatex $<
 	pdflatex $<
 	rm -f *.aux *.log *.out
-
+	mv ../$@ doc
 
 install:
 	test -d "$(DESTDIR)$(libdir)/pure" || mkdir -p "$(DESTDIR)$(libdir)/pure"
 	cp $(PUREFILES) $(lib_name)$(DLL) doc/$(project_name).html "$(DESTDIR)$(libdir)/pure"
 
 uninstall:
-	rm -f "$(DESTDIR)$(libdir)/pure/csv.pure" "$(DESTDIR)$(libdir)/pure/$(lib_name)$(DLL)" "$(DESTDIR)$(libdir)/pure/$(project_name).html"
+	rm -f "$(DESTDIR)$(libdir)/pure/$(PUREFILES)" "$(DESTDIR)$(libdir)/pure/$(lib_name)$(DLL)" "$(DESTDIR)$(libdir)/pure/$(project_name).html"
 	for f in $(PUREFILES); do rm -f "$(DESTDIR)$(libdir)/pure/$$f"; done
 
 dist: doc/$(target).html
