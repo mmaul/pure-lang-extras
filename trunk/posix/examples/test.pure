@@ -1,2 +1,0 @@
-// dump written Fri Aug 14 17:36:15 2009
-let d = Dict (dict::bin "foo" 77 1 (dict::bin "bar" 99.1 0 dict::nil dict::nil) dict::nil);
