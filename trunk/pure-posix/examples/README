@@ -1,0 +1,18 @@
+====== ========
+socket examples
+====== ========
+
+socket_server.pure
+==================
+
+Opens a TCP socket at port 5000 on the loopback interface and
+listens an printes out lines received.
+Run with pure -I ../.. -L ../.. socket_server.pure
+
+socket_client.pure
+==================
+
+Opens a TCP socket and connect to a server listening at port 5000,
+writes 10 lines of text over the socket.
+Run with pure -I ../.. -L ../.. socket_client.pure
+
