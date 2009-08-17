@@ -21,7 +21,7 @@ SOURCEFILES = $(PUREFILES) $(CFILES) socket.pure.head socket.pure.tail \
 posix.head
 #all files to be included in a source release
 DISTFILES = COPYING Makefile README config.guess examples/*.pure $(SOURCEFILES) \
- doc/$(project_name).html
+ doc/*
 dist = $(project_name)-$(version)
 target = $(project_name)
 
@@ -85,16 +85,18 @@ socket.pure :
 #### END   project specific build tasks
 
 $(lib_name)$(DLL): $(CFILES)
-	gcc -shared -o $@ $?
+	gcc -shared -o $@ $? $(FLAGS)
 
 clean: 
-	rm -f socket.pure $(lib_name)$(DLL) $(GENCFILES) *.aux *.log *.out \
+	rm -f  $(lib_name)$(DLL) *.aux *.log *.out \
               doc/*.pdf doc/*.tex doc/*.html doc/*.txt $(dist).tar.gz *~
 	rm -rf $(dist)
+realclean: clean
+	rm -f $(GENCFILES) $(GENPUREFILES)
 # documentation (this needs docutils)
 
 doc/$(target).txt: README $(SOURCEFILES)
-	pure-doc $< > $@
+	pure-doc socket.pure | cat README - > $@
 
 .PHONY: html tex pdf
 
@@ -120,8 +122,8 @@ install:
 	cp $(PUREFILES) $(lib_name)$(DLL) doc/$(project_name).html "$(DESTDIR)$(libdir)/pure/$(lib_name)"
 
 uninstall:
-	rm -f "$(DESTDIR)$(libdir)/pure/$(PUREFILES)" "$(DESTDIR)$(libdir)/pure/$(lib_name)$(DLL)" "$(DESTDIR)$(libdir)/pure/$(project_name).html"
-	for f in $(PUREFILES); do rm -f "$(DESTDIR)$(libdir)/pure/$$f"; done
+	rm -rf "$(DESTDIR)$(libdir)/pure/posix" \
+"$(DESTDIR)$(libdir)/pure/$(project_name).html"
 
 dist: doc/$(target).html
 	rm -rf $(dist)
