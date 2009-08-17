@@ -1,2 +1,13 @@
 namespace posix;
+/*   :Name: `` fdopen`` - open a FILE object for a file descriptor
+     :Synopsis: ``fdopen::int <sockfd::int> <modes:string>``
+     :Description: While not posix, included to be able to using existing IO functions
+                   on socket file descriptors. FOr the most part mode should be "r+"
+                   
+                   The return value on success is a pointer to a FILE structure 
+                   otherwise a NULL is returned.
+
+     :See Also: fdopen(2)  */
+extern FILE *fdopen (int fd, char *modes);
 using "lib:posix/posix.so";
+
