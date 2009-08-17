@@ -44,8 +44,8 @@ let posix::socket::sockaddr_in =  struct_t( sint16_t, //sin_family  must be AF_I
 			     char[8] //sin_zero  Not used, must be zero 
 );
 
-/*   :Name: ``make-sockaddr`` - create sockaddr structure 
-     :Synopsis: ``make-sockaddr::pointer_t <family::int> <address::string> <port::int>``
+/*   :Name: ``make_sockaddr`` - create sockaddr structure 
+     :Synopsis: ``make_sockaddr::pointer_t <family::int> <address::string> <port::int>``
      :Description: Creates the sockaddr stucture necessary 
                    for binding and using sockets. This is difficult to do in pure pure
                    so a c wrapper was created.
@@ -91,15 +91,3 @@ extern int pure_connect(int sockfd, void *address)=connect_socket;
      :See Also: accept(2)  */
 extern int pure_accept( int sockfd, void * address)=accept_socket;
 
-/*   :Name: `` fdopen`` - open a FILE object for a file descriptor
-     :Synopsis: ``fdopen::int <sockfd::int> <modes:string>``
-     :Description: While not posix, included to be able to using existing IO functions
-                   on socket file descriptors. FOr the most part mode should be "r+"
-                   
-                   The return value on success is a pointer to a FILE structure 
-                   otherwise a NULL is returned.
-
-     :See Also: fdopen(2)  */
-extern FILE *fdopen (int fd, char *modes);
-//extern int write_string(int fd, char *buf)=pure_;
-//extern char *read_string(int fd,int len);
