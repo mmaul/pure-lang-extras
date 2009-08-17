@@ -1,2 +1,2 @@
 using "lib:posix/posix.so";
-namespace posix; //using posix::posix;
+namespace posix; 
