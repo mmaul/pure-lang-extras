@@ -1,7 +1,7 @@
-/* Example of createing s server socket and listening for conections */
+/* Example of creating a server socket and listening for connections. */
 using ffi,system;
-using posix::socket;
-using namespace posix::socket;
+using posix, posix::socket;
+using namespace posix, posix::socket;
 
 readloop f = read_a_line f 0
 with read_a_line f c = check s when s = fgets f end
