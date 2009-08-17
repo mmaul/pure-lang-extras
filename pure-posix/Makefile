@@ -5,7 +5,7 @@ project_name = pure-$(lib_name)
 version = 0.1
 
 #generated pure files * will be deleted by clean *
-GENPUREFILES = socket.pure fork.pure
+GENPUREFILES = socket.pure
 #manually created pure files * will not be deleted by clean *
 MANPUREFILES = posix.pure
 #pure code (will be installed)
@@ -73,7 +73,7 @@ PIC = -fPIC
 endif
 FLAGS = $(CPPFLAGS) $(CFLAGS) $(PIC) $(LDFLAGS)
 
-all : socket.pure fork.pure $(lib_name)$(DLL) doc/$(target).html
+all : socket.pure $(lib_name)$(DLL) doc/$(target).html
 
 #### BEGIN project specific build tasks
 socket.pure :
@@ -82,20 +82,13 @@ socket.pure :
 	cat posix.head socket.pure.head  socket.pure.tmp1 socket.pure.tail > socket.pure
 	rm socket.pure.tmp1
 
-fork.pure :
-	pure-gen --interface extern --namespace posix::fork \
-                 -s "(.*fork.*|.*sleep.*)" --output fork.pure $(INCLUDE_PATH)/unistd.h
-	pure-gen --interface extern --namespace posix::fork \
-                 -s "(.*wait.*)" --output fork.pure  --noclobber \
-                 -fc-auto $(INCLUDE_PATH)/sys/wait.h
-
 #### END   project specific build tasks
 
 $(lib_name)$(DLL): $(CFILES)
 	gcc -shared -o $@ $?
 
 clean: 
-	rm -f socket.pure fork.pure $(lib_name)$(DLL) $(GENCFILES) *.aux *.log *.out \
+	rm -f socket.pure $(lib_name)$(DLL) $(GENCFILES) *.aux *.log *.out \
               doc/*.pdf doc/*.tex doc/*.html doc/*.txt $(dist).tar.gz *~
 	rm -rf $(dist)
 # documentation (this needs docutils)
