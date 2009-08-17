@@ -2,7 +2,7 @@
 # library, projecte name and version number:
 lib_name=posix
 project_name = pure-$(lib_name)
-version = 0.1
+version = 0.1.3
 
 #generated pure files * will be deleted by clean *
 GENPUREFILES = socket.pure
