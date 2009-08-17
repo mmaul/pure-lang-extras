@@ -11,7 +11,7 @@ MANPUREFILES = posix.pure
 #pure code (will be installed)
 PUREFILES = $(MANPUREFILES) $(GENPUREFILES)
 #generated c files * will be deleted by clean *
-GENCFILES = wait.c 
+GENCFILES = 
 #manually created cfiles * will not be delete by clean *
 MANCFILES =  socket.c
 #all c files
