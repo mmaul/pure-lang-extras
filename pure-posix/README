@@ -1,12 +1,12 @@
-======== = === ========== ======= ========= === ====
-pure_posix - POSIX Library interface for Pure
-======== = === ========== ======= ========= === ====
+=============================================
+pure-posix - POSIX Library interface for Pure
+=============================================
 
 :Authors: - Mike Maul<mike.maul@gmail.com>
 
-This is a library containg bindings for the POSIX system interface. It is not complete
-but attempts to implement some of the more commenly used interfaces. Currently implemented
-is a socket interface and fork.
+This is a library containg bindings for the POSIX system interface. It is not
+complete but attempts to implement some of the more commenly used
+interfaces. Currently implemented is a socket interface and fork.
 
 Installation
 ============
@@ -16,7 +16,7 @@ it in the Pure library directory. This requires GNU make, and of course you
 need to have Pure installed. It is also necessary to have an operating system
 that is POSIX compatible as well as the header files available. Additionally 
 pure-gen is used to generate the base bindings. However if pure-gen is not 
-installed pregenerated base bindings are included in the distrubition tarball
+installed pregenerated base bindings are included in the distribution tarball
 at http://code.google.com/p/pure-lang-extras/. 
 
 ``make`` tries to guess your Pure installation directory and platform-specific
@@ -26,17 +26,20 @@ particular, ``make install prefix=/usr`` sets the installation prefix, and
 bit systems. 
 
 Other useful build targets are
-html  -- builds html documentation
-pdf   -- builds pdf documentation
-dist  -- build distrubtuion copy of source package
-clean -- removes all generated and compiled files 
-         (Dont do this if pure-gen is not installed)
+* html      -- builds html documentation
+* pdf       -- builds pdf documentation
+* dist      -- build distrubtuion copy of source package
+* clean     -- removes compiled files
+* realclean -- removes all generated and compiled files (Dont do this if pure-gen is not installed)
+* uninstall -- uninstalls package
+
 Usage
 =====
-This library is has functionality divided into to seperate modules. All modules
-have a parent namespace of ``posix``. 
-The socet module has the name space of ``posix::socket`` and the fork module has the
-namespace of ``posix::fork``.
 
-For moure information see the pure-posix documentation and the programs in the example directory.
+This library is has functionality divided into to seperate modules. All
+modules have a parent namespace of ``posix``. The socket module has the
+namespace of ``posix::socket`` and the fork module has the namespace of
+``posix::fork``.
 
+For more information see the pure-posix documentation and the programs in the
+example directory.
