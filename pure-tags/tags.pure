@@ -1,0 +1,81 @@
+/* ..
+
+   Pure Tags
+   ======================
+
+   module:: tags
+   -------------
+   The tags.pure module provides for the rendering of an XMLish tag structure from a
+   pure term. Useful for generation of a HTML document.
+   
+
+   Imports
+   -------
+
+   To use the operations of this module, add the following import declaration
+   to your program::
+
+     using tags;
+
+   Basic Usage
+   --------------------
+
+   .. function: quote s
+
+     Encloses ``s`` in block quotes
+   
+  .. function: render_tags root
+     Returns string represention of mapping a pure term to a XML like format.
+     Terms are of the form 
+
+| TAG := ( symbol | string ) record TAG|List of TAG
+
+    Parens or brackets are required to group expressions. Grouping with
+    brackets is especially useful as terms can be manupulated using list
+    operators
+
+    Example:
+
+|  > tags::render_tags (html {} [body {} 
+|      [form {action=>""} [fieldset {} [
+|       legend {} "Contact Info:",
+|       "Name:",  input {"type" => "text", size => 32} [],
+|       "Email:", input {"type" => "text", size => 48} [],
+|       "Phone:", input {"type" => "text", size => 12} []
+|    ]]]]);
+|
+|   "<html ><body ><form action='' ><fieldset ><legend >Contact Info:</legend>Name:<input type='text' size='32' ></input>Email:<input type='text' size='48' ></input>Phone:<input type='text' size='12' ></input></fieldset></form></body></html>"
+
+Goto: `README
+<README.html>`_.
+*/
+namespace tags;
+
+equote s::string = ("'"+s+"'");
+
+symbol_to_string s = if stringp s then s else last (split "::" (str (s)));
+
+render_attributes r::record =  foldl (+) "" 
+			       ( map (\x -> (if (symbolp name) 
+					     then  (symbol_to_string name) 
+					     else name)+
+				      "="+(quote (if (stringp value) 
+						  then value
+						  else (str value)))+" " when 
+                                                               name = key x;
+					                       value = val x;
+						         end) (list r));
+render_attributes _ = throw INVALID_ATTRIBUTES;
+
+render_tags root  = render root with
+  render tags = (foldl (\x y -> x + render y) "" tags) if listp tags;
+  render txt = txt if stringp txt;
+  render (tag@(_) attrib::record children) =  "<"+tag_str+" " + (render_attributes attrib) + ">" + 
+				      render children + "</"+tag_str+">" with
+					tag_str = (symbol_to_string tag);
+				      end;
+  render _ =  throw INVALID_TAGS;
+end;
+
+
+
